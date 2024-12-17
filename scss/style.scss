@@ -1,0 +1,473 @@
+/* base */
+html {
+    font-size: 62.5%  /* 1rem=16pxを10pxに変換 */
+}
+
+body {
+    background: white;
+    min-width: 320px;
+    width: 100%;
+    //height: auto;
+    margin: 0;
+    font-size: 1.6rem;
+    font-family: Noto Sans JP;
+    font-family: "Noto Sans JP", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: weight;
+    font-style: normal;
+    line-height: 1.7;
+}
+
+img {
+    //max-width: 100%;  //画面幅より大きく表示させないようにする
+    //height: auto;
+    vertical-align: middle;  //デフォルトの余白を無くす
+}
+
+h1, h2, h3, h4, h5, h6, p, figure {
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+}
+
+a {
+    text-decoration: none;  //アンダーラインを無くす
+    color: inherit;  //親要素のスタイルを継承する
+}
+
+ul {
+    list-style-type: none;  //・を無くす
+}
+
+$blue: #2497B2;
+
+//mixin @media
+@mixin breakpoint($point) {
+    @if $point==tablet {
+        @media (min-width: 750px) {
+            @content ;  //呼び出す側のコードをそのまま使う
+        }
+    }
+    @if $point==pc {
+        @media (min-width: 1184px) {
+            @content ;
+        }
+    }
+}
+
+
+.header {
+    height: 50px;
+    width: 100%;
+    background: white;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    @include breakpoint(pc) {
+        height: 70px;
+    }
+    .header_title {
+        display: flex;
+        .header_logo img {
+            width: 143px;
+            margin: 10px 17px 0 10px;
+            @include breakpoint(pc) {
+                width: 157px;
+                margin: 18px 17px 0 20px;
+            }
+        } 
+        .header_copy {
+            font-size: 1.4rem;
+            margin-top: 12px;
+            line-height: 1.38;
+            font-weight: bold;
+            span {
+                font-size: 1.8rem;
+            }
+            display: none;
+            @media (min-width:1260px) {
+                width: 100%;
+                display: block;  //noneの逆（表示させる）
+            }
+        }
+    }
+
+    
+    .nav_btn {
+        position: absolute;
+        right: 0;
+        @include breakpoint(pc) {
+            display: none;
+        }
+        a span {
+            font-size: 0;
+            display: block;
+            width: 23px;
+            height: 2px;
+            background-color: $blue;
+            position: absolute;
+            top: 24px;
+            left: 14px;
+            @include breakpoint(PC) {
+                display: none;
+            }
+        }
+
+        .close { //nav-menuが閉じている、ハンバーガーアイコン
+            display: block;
+            width: 50px;
+            height: 50px;
+            position: relative;
+            transition: background-color 0.3s;
+            &::before,&::after {
+                background-color: $blue;
+                content: "";
+                width: 23px;
+                height: 2px;
+                position: absolute;
+                left: 14px;
+                transition: transform 0.3s, background-color 0.3s;
+            }
+            //::before と ::after のスタイルは同じレベルで定義すること
+            &::before {
+                top: 15px;
+            }
+            &::after {
+                bottom: 15px;
+            }
+        }
+
+        .open {  //nav-menuが開いている、×アイコン
+            display: block;
+            width: 50px;
+            height: 50px;
+            background-color: $blue;
+            position: relative;
+            transition: background-color 0.3s;
+            &::before,&::after {
+                background-color: white;
+                content: "";
+                width: 23px;
+                height: 2px;
+                position: absolute;
+                top: 24px;
+                left: 14px;
+                transition: transform 0.3s, background-color 0.3s;
+            }
+            &::before {
+                transform: rotate(-45deg);
+            }
+            &::after {
+                transform: rotate(-135deg);
+            }
+            span {
+                display: none;
+            }
+        }
+    }
+
+
+    .header_nav {
+        @include breakpoint(pc) {
+            display: block; 
+        }
+        .nav_list {
+            display: block;
+            position: absolute;
+            top: 50px;
+            left: 0;
+            right: 0;
+            background-color: white;
+            &.nav-list-pc {
+                @include breakpoint(pc) {
+                    display: flex;
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    left: auto;
+                    width: auto;
+                    justify-content: space-between;
+                }
+            }
+            .nav_title {
+                line-height: 48px;
+                font-weight: bold;
+                position: relative;
+                a {
+                    padding: 10px;
+
+                    &::before {
+                        content: "";
+                        width: 24px;
+                        height: 2px;
+                        background-color: black;
+                        position: absolute;
+                        right: 13px;
+                        top: 24px;
+                        @include breakpoint(pc) {
+                            display: none;
+                        }
+                    }
+                    &::after {
+                        content: "";
+                        width: 2px;
+                        height: 24px;
+                        background-color: black;
+                        position: absolute;
+                        right: 24px;
+                        top: 13px;
+                        @include breakpoint(pc) {
+                            display: none;
+                        }
+                    }
+
+                    @include breakpoint(pc) {
+                        line-height: 70px;
+                        padding-left: 15px;
+                        padding-right: 15px;
+                        position: relative;
+                    }
+                }
+
+                .dropdown_list {
+                    display: none;
+                    font-weight: normal;
+                    background-color: white;
+
+                    @include breakpoint(pc) {
+                        background-color: #E9F8FB;
+                        position: absolute;
+                        top: 70px;
+                        left: 0;
+                        width: max-content;
+                    }
+                    .dropdown_item {
+                        padding-left: 16px;
+                        @include breakpoint(pc) {
+                            width: 100%;
+                            padding: 0 76px 0 4px;
+                            line-height: 58px;
+                            font-weight: normal;
+                        }
+                    }
+                    .dropdown_item:hover {
+                        background-color: #F2FAFC;
+                        transition: .3s;
+                        @include breakpoint(pc) {
+                        background-color: white;
+                        color: $blue;
+                        transition: .3s;
+                        }
+                    }
+                }
+            }
+
+            .nav_title:nth-of-type(3) > a::before ,
+            .nav_title:nth-of-type(3) > a::after {
+                display: none;
+            }
+            .nav_title:hover a::after {
+                display: none;                
+            }
+            .nav_title:last-child {
+                display: none;
+                @include breakpoint(pc) {
+                    display: block;
+                    background-color: $blue;
+                    color: white;
+                }
+            }
+        }
+
+            /*
+            .nav_title:not(:last-child):hover {
+                background-color: #F2FAFC;
+                transition: .3s;  //背景色の変化をアニメーション化
+                @include breakpoint(pc) {
+                    background-color: #25109a;
+                }
+            }
+            */
+    }
+}
+
+.main {
+    .main_img {
+        position: relative;
+        overflow: hidden;
+        height: 165px;
+        width: 100%;
+        margin-top: 50px;
+        @include breakpoint(tablet) {
+            height: 650px;
+        }
+        @include breakpoint(pc) {
+            margin-top: 70px;
+        }
+        .img03 {
+            position: absolute;
+            background-image: url(../images/index_img03.png);
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            height: 650px;
+            width: 100%;
+        }
+        .img02 {
+            position: absolute;
+            width: 800px;
+            left: 50%;
+            top: -25px;
+            transform: translate(-50%,0);
+            z-index: 2;
+            @include breakpoint(tablet) {
+                width: 2000px;
+                top: -75px;
+            } 
+        }
+        .img01 {
+            position: absolute;
+            width: 800px;
+            left: 50%;
+            top: -30px;
+            transform: translate(-50%,0);
+            z-index: 3;
+            @include breakpoint(tablet) {
+                width: 2000px;
+                top: -75px;
+            }
+        }
+    }
+    .main_content {
+        position: relative;
+        z-index: 4;
+        background: white;
+        height: 156px;
+        padding-top: 14px;
+        transition: height 0.3s;
+
+        @include breakpoint(tablet) {
+            padding: 0;
+            background: white;
+            width: 412px;
+            height: 327px;
+            border-radius: 10px;   //角丸
+            position: absolute;
+            left: 50%;
+            top: 130px;
+            transform: translate(-50%,0);   //ズレを補正（要素の中心配置にする、（左右,上下））
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+        @include breakpoint(pc) {
+            top: 150px;
+        }
+        &_logo {
+            display: none;
+            @include breakpoint(tablet) {
+                display: block;
+                width: 280px;
+                height: auto;
+                margin-top: 43px;
+            }
+        }
+        &_caption {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-weight: bold;
+            transition: 0.3s;
+
+            @include breakpoint(tablet) {
+            margin-top: 20px;
+            }
+            .caption_txt {
+                font-size: 1.3rem;
+                line-height: 1.7;
+                text-align: center;
+                @include breakpoint(tablet) {
+                font-size: 1.6rem;
+                }
+            }
+            .caption_btn {
+                display: inline-block;
+                width: 228px;
+                height: 42px;
+                border-radius: 4px;
+                background-color: $blue;
+                text-align: center;
+                line-height: 42px;
+                margin-top: 14px;
+                color: white;
+                transition: 0.3s;
+
+                @include breakpoint(tablet) {
+                width: 290px;
+                height: 67px;
+                line-height: 67px;
+                margin: 30px 0 26px 0;
+                font-size: 1.8rem;
+                }
+            }
+        }
+    }    
+}
+
+
+.main_concept_wrap {
+    position: relative;
+    z-index: 3;
+    height: auto;
+    background: black;
+    padding-top: 64px;
+    @include breakpoint(tablet) {
+    padding: 0;
+    margin: 0;
+    }
+    .main_concept {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        &_rule, &_teacher, &_support {
+            width: auto;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 40px;
+            padding: 0 10px;
+            dl {
+                display: inline-block;
+                text-align: center;
+                dt {
+                font-size: 2.4rem;
+                margin: 6px 0;
+                }
+                dd {
+                padding: 0 10px;
+                margin: 0;
+                text-align: left;
+                }
+            }
+            @include breakpoint(tablet) {
+                width: 280px;
+                padding: 0;
+            }
+
+        }
+        @include breakpoint(tablet) {
+            height: 230px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            max-width: 890px;
+            //text-align: center;
+            position: relative;
+            left: 50%;
+            top: -200px;
+            transform: translate(-50%,0);
+        }
+    }
+}
